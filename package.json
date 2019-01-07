@@ -3,18 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start":"node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kang-heewon/Toy_EmMemo.git"
+    "url": "git+https://github.com/kang-heewon/EM_Memo.git"
   },
   "author": "kang-heewon",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/kang-heewon/Toy_EmMemo/issues"
+    "url": "https://github.com/kang-heewon/EM_Memo/issues"
   },
-  "homepage": "https://github.com/kang-heewon/Toy_EmMemo#readme",
+  "homepage": "https://github.com/kang-heewon/EM_Memo#readme",
   "description": "",
   "dependencies": {
     "dotenv": "^6.2.0",
