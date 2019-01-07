@@ -5,7 +5,7 @@ require('dotenv').config()
 const app = express()
 const port = 3000
 
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(
+mongoose.connect("mongodb://em_memo:em_memo1@ds255403.mlab.com:55403/em_memo", { useNewUrlParser: true }).then(
     () => { console.log('DataBase is connected'); } ,
     err => { console.log('Check DB - Connection error : '); }
 )
