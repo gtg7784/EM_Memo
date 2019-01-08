@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>EM_MEMO</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <script>
+            let load = null
+            let write = null
+            let modify = null
+            let del = null
+            $(document).ready(() => {
+                load =  () => {
+                    $.get('/load',(data) => {
+                        console.log(data);
+                        $("#memo").empty();
+                        $(data).each(function (i) {
+                            let id = this._id
+                            $("#memo").prepend("<div class='item'></div>");
+                            $("#memo .item:first").append("<div class='photo_thumb'></div>");
+                            $("#memo .item:first").append("<div class='author'><b>" + this.author + "</b> (" + this.date + ")&nbsp;&nbsp;|<span class='text_button modify'>MODIFY</span>|<sapn class='text_button del'>DELETE</span></div>");
+                            $("#memo .item:first").append("<div class='contents " + id + "'>" + this.contents + "</div>");
+                            $("#memo .item:first .modify").click(function (evt) {
+                                console.log('click ' + id);
+                                let contents = $("#memo ." + id).html();
+                                $("#memo ." + id).html("<textarea id='textarea_" + id + "' class='textarea_modify'>" + contents + "</textarea>");
+                                $("#textarea_" + id).keypress(function (evt) {
+                                    console.log(evt.keycode);
+                                    if((evt.keyCode || evt.which) == 13){
+                                        if(this.value != "") {
+                                            console.log(this.value);
+                                            modify(this.value, id);
+                                            evt.preventDefault();
+                                        }
+                                    }
+                                });
+                            });
+                            $("#memo .item:first .del").click((evt) => {
+                                del(id);
+                            });
+                        });
+                    });
+                };
+                modify = (contents, id) => {
+                    let postdata = {
+                        'author' : $("#author").val(),
+                        'contents' : contents,
+                        '_id' : id
+                    };
+                    $.post('/modify', postdata, () => {
+                        load();
+                    });
+                };
+                write = (contents) => {
+                    let postdata = {
+                        'author' : $("#author").val(),
+                        'contents' : contents
+                    };
+                    $.post('/write', postdata, () => {
+                        load();
+                    });
+                };
+                del = (id) => {
+                    console.log(id);
+                    let postdata = {
+                        '_id' : id
+                    };
+                    $.post('/del', postdata, () => {
+                        load();
+                    });
+                };
+                $("#write textarea").keypress(function (evt) {
+                    if((evt.keyCode || evt.which) == 13){
+                        if (this.value != "") {
+                            write(this.value);
+                            evt.preventDefault();
+                            $(this).val("");
+                        }
+                    }
+                });
+                $("#write_button").click((evt) => {
+                    console.log($("#write textarea").val());
+                    write($("#write textarea").val());
+                });
+                load();
+            });
+        </script>
+    </head>
+    <body>
+        <div id='main'>
+            <div id='title'>EM_Memo</div>
+            <div id='write'>
+                <div class='left'>
+                    <input id='author' class='author' type='text' value='TestUser'/>
+                </div>
+                <div class='right'>
+                    <textarea></textarea>
+                    <br />
+                    <input id='write_button' type='button' value='WRITE' />
+                </div>
+            </div>
+            <div id='memo'>
+                <div class='item'>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
