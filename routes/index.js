@@ -1,5 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const moment = require('moment');
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+
 const mongoose = require('mongoose')
 
 const db = mongoose.connect("mongodb://em_memo:em_memo1@ds255403.mlab.com:55403/em_memo", { useNewUrlParser: true }).then(
@@ -29,7 +33,7 @@ router.get('/load',(req, res) => {
 router.post('/write',(req, res) => {
     const author = req.body.author;
     const contents = req.body.contents;
-    const date = Date.now();
+    const date = moment().format('YYYY-MM-DD HH:mm:ss');
     const memo = new memoModel();
 
     memo.author = author;
